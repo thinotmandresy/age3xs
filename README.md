@@ -41,4 +41,4 @@ Enables syntax highlighting and provides snippets for the scripting language use
 
 ### 1.0.0
 
-Initial release.
+- Initial release.
