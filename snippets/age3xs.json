@@ -1,4 +1,56 @@
 {
+  "Create new rule": {
+    "prefix": "newrule",
+    "body": [
+      "rule ${1:ruleName}",
+      "${2:active}",
+      "minInterval ${3:5}",
+      "{",
+      "    $4",
+      "}"
+    ],
+    "description": "Rule boilerplate"
+  },
+  "Create new rule (run immediately)": {
+    "prefix": "newruleri",
+    "body": [
+      "rule ${1:ruleName}",
+      "${2:active}",
+      "minInterval ${3:5}",
+      "${4:runImmediately}",
+      "{",
+      "    $5",
+      "}"
+    ],
+    "description": "Rule boilerplate"
+  },
+  "Create new rule (group)": {
+    "prefix": "newruleg",
+    "body": [
+      "rule ${1:ruleName}",
+      "${2:active}",
+      "minInterval ${3:5}",
+      "group ${4:groupName}",
+      "{",
+      "    $5",
+      "}"
+    ],
+    "description": "Rule boilerplate"
+  },
+  "Create new rule (run immediately, group)": {
+    "prefix": "newrulerig",
+    "body": [
+      "rule ${1:ruleName}",
+      "${2:active}",
+      "minInterval ${3:5}",
+      "${4:runImmediately}",
+      "group ${5:groupName}",
+      "{",
+      "    $6",
+      "}"
+    ],
+    "description": "Rule boilerplate"
+  },
   "Incrementing for loop (non-inclusive)": {
     "prefix": "forasc",
     "body": ["for (${1:i} = ${2:0}; < ${3:cNumberPlayers})", "{", "${4:}", "}"],
