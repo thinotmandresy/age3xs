@@ -1,0 +1,84 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Age of Empires III XS",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#storage"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.age3xs",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.age3xs",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "storage": {
+      "patterns": [
+        {
+          "name": "storage.type.age3xs",
+          "match": "\\b(void|rule|bool|int|float|string|vector|class)\\b"
+        },
+        {
+          "name": "storage.modifier.age3xs",
+          "match": "\\b(static|extern|const|mutable|active|inactive|highFrequency|runImmediately|minInterval|maxInterval|group)\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.age3xs",
+          "match": "\\b(if|else|switch|label|while|for|goto|continue|break|case|default|breakpoint|return)\\b"
+        },
+        {
+          "name": "keyword.operator.age3xs",
+          "match": "(?:\\+\\+|\\-\\-|\\+|\\-|\\*|\\/|\\%|\\&\\&|\\|\\||\\!|\\~|\\&|\\||\\^|\\=\\=|\\!\\=|\\<\\=|\\>\\=|\\<|\\>|\\=|\\?|\\:|\\,|\\.)"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.age3xs",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.numeric.age3xs",
+          "match": "(?<![\\w.])(?:[+-]?\\d*\\.\\d+|\\d+\\.\\d*|[+-]?\\d+\\.?)(?![\\w.]|\\.\\.)"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.age3xs",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.age3xs",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.xs"
+}

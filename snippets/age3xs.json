@@ -1,0 +1,125 @@
+{
+  "Incrementing for loop (non-inclusive)": {
+    "prefix": "forasc",
+    "body": ["for (${1:i} = ${2:0}; < ${3:cNumberPlayers})", "{", "${4:}", "}"],
+    "description": "Incrementing for loop (non-inclusive)"
+  },
+  "Incrementing for loop (inclusive)": {
+    "prefix": "forasci",
+    "body": [
+      "for (${1:i} = ${2:0}; <= ${3:cNumberPlayers})",
+      "{",
+      "${4:}",
+      "}"
+    ],
+    "description": "Incrementing for loop (inclusive)"
+  },
+  "Decrementing for loop (non-inclusive)": {
+    "prefix": "fordesc",
+    "body": ["for (${1:i} = ${2:cNumberPlayers}; > ${3:0})", "{", "${4:}", "}"],
+    "description": "Decrementing for loop (non-inclusive)"
+  },
+  "Decrementing for loop (inclusive)": {
+    "prefix": "fordesci",
+    "body": [
+      "for (${1:i} = ${2:cNumberPlayers}; >= ${3:0})",
+      "{",
+      "${4:}",
+      "}"
+    ],
+    "description": "Decrementing for loop (inclusive)"
+  },
+  "While loop": {
+    "prefix": "while",
+    "body": ["while (${1:false})", "{", "${2:}", "}"],
+    "description": "While loop"
+  },
+  "Create AI Plan": {
+    "prefix": "newplan",
+    "body": [
+      "int ${1:planID} = aiPlanCreate(\"${2:Plan Name}\", cPlan${3:Type});",
+      "aiPlanSetActive(${1:planID}, ${4:true});"
+    ],
+    "description": "Create AI Plan"
+  },
+  "Create AI Plan with Escrow": {
+    "prefix": "newplane",
+    "body": [
+      "int ${1:planID} = aiPlanCreate(\"${2:Plan Name}\", cPlan${3:Type});",
+      "aiPlanSetEscrowID(${1:planID}, ${4:cRootEscrowID});",
+      "aiPlanSetActive(${1:planID}, ${5:true});"
+    ],
+    "description": "Create AI Plan with Escrow"
+  },
+  "Create AI Plan with Unit Type": {
+    "prefix": "newplanu",
+    "body": [
+      "int ${1:planID} = aiPlanCreate(\"${2:Plan Name}\", cPlan${3:Type});",
+      "aiPlanAddUnitType(${1:planID}, ${4:cUnitTypeUnit}, ${5:min}, ${6:want}, ${7:max});",
+      "aiPlanSetActive(${1:planID}, ${8:true});"
+    ],
+    "description": "Create AI Plan with Unit"
+  },
+  "Create AI Plan with Escrow and Unit Type": {
+    "prefix": "newplaneu",
+    "body": [
+      "int ${1:planID} = aiPlanCreate(\"${2:Plan Name}\", cPlan${3:Type});",
+      "aiPlanSetEscrowID(${1:planID}, ${4:cRootEscrowID});",
+      "aiPlanAddUnitType(${1:planID}, ${5:cUnitTypeUnit}, ${6:min}, ${7:want}, ${8:max});",
+      "aiPlanSetActive(${1:planID}, ${9:true});"
+    ],
+    "description": "Create AI Plan with Escrow and Unit"
+  },
+  "Create AI Build Plan": {
+    "prefix": "newplanb",
+    "body": [
+      "int ${1:buildPlan} = aiPlanCreate(\"Build ${2:Building}\", cPlanBuild);",
+      "aiPlanSetDesiredPriority(${1:buildPlan}, ${3:50});",
+      "aiPlanSetEscrowID(${1:buildPlan}, ${4:cRootEscrowID});",
+      "aiPlanSetVariableInt(${1:buildPlan}, cBuildPlanBuildingTypeID, 0, ${5:cUnitTypeBuilding});",
+      "aiPlanAddUnitType(${1:buildPlan}, ${6:cUnitTypeAbstractVillager}, ${7:1}, ${8:1}, ${9:1});",
+      "aiPlanSetActive(${1:buildPlan}, ${10:true});"
+    ],
+    "description": "Create AI Build Plan"
+  },
+  "Create AI Research Plan": {
+    "prefix": "newplanr",
+    "body": [
+      "int ${1:researchPlan} = aiPlanCreate(\"Research ${2:Technology}\", cPlanResearch);",
+      "aiPlanSetEscrowID(${1:researchPlan}, ${3:cRootEscrowID});",
+      "aiPlanSetVariableInt(${1:researchPlan}, cResearchPlanTechID, 0, ${4:cTechHuntingDogs});",
+      "aiPlanSetActive(${1:researchPlan}, ${5:true});"
+    ],
+    "description": "Create AI Research Plan"
+  },
+  "Create AI Maintain Plan": {
+    "prefix": "newplanm",
+    "body": [
+      "int ${1:maintainPlan} = aiPlanCreate(\"Maintain ${2:Unit}\", cPlanTrain);",
+      "aiPlanSetEscrowID(${1:maintainPlan}, ${3:cRootEscrowID});",
+      "aiPlanSetVariableInt(${1:maintainPlan}, cTrainPlanUnitType, 0, ${4:cUnitTypeUnit});",
+      "aiPlanSetVariableInt(${1:maintainPlan}, cTrainPlanNumberToMaintain, 0, ${5:1});",
+      "aiPlanSetVariableBool(${1:maintainPlan}, cTrainPlanUseMultipleBuildings, 0, ${6:true});",
+      "aiPlanSetVariableInt(${1:maintainPlan}, cTrainPlanBatchSize, 0, ${7:1});",
+      "aiPlanSetActive(${1:maintainPlan}, ${8:true});"
+    ],
+    "description": "Create AI Maintain Plan"
+  },
+  "Create Unit Query": {
+    "prefix": "newquery",
+    "body": [
+      "int ${1:unitQueryID} = kbUnitQueryCreate(\"${2:Query name}\");",
+      "kbUnitQuerySetUnitType(${1:unitQueryID}, ${3:cUnitTypeAll});",
+      "kbUnitQuerySetState(${1:unitQueryID}, ${4:cUnitStateAlive});",
+      "kbUnitQuerySetIgnoreKnockedOutUnits(${1:unitQueryID}, ${5:true});",
+      "kbUnitQuerySetPlayerRelation(${1:unitQueryID}, ${6:cPlayerRelationAny});",
+      "kbUnitQuerySetPlayerID(${1:unitQueryID}, ${7:-1}, ${8:false});",
+      "kbUnitQuerySetAscendingSort(${1:unitQueryID}, ${9:false});",
+      "kbUnitQuerySetPosition(${1:unitQueryID}, ${10:kbGetMapCenter()});",
+      "kbUnitQuerySetMaximumDistance(${1:unitQueryID}, ${11:kbGetMapXSize()});",
+      "kbUnitQueryResetResults(${1:unitQueryID});",
+      "int numFound = kbUnitQueryExecute(${1:unitQueryID});",
+      "int unit = kbUnitQueryGetResult(${1:unitQueryID}, 0);"
+    ]
+  }
+}
