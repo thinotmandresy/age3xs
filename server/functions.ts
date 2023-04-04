@@ -651,7 +651,7 @@ int aiGetLastCollectedNuggetEffect(int playerID);
 int aiGetNumberTradePostsControlled(int teamID);
 // Gets the number of tradeposts needed to make a monopoly win possible.
 int aiGetNumberTradePostsNeededForMonopoly();
-// Returns true if the monopoly command can be given now.  Does not check cost.
+// Returns true if the monopoly command can be given now. Does not check cost.
 bool aiReadyForTradeMonopoly();
 // Executes a trade monopoly command, returns false if it fails.
 bool aiDoTradeMonopoly();
@@ -703,7 +703,7 @@ bool aiSetTacticFarm(bool v);
 void kbDump(int player1, int player2);
 // KB dump for player2's units of the given type from player1's perspective.
 void kbDumpType(int player1, int player2, string typeName);
-// Cheats and looks at all of the units on the map.  This will format your harddrive if you're not authorized to use it.
+// Cheats and looks at all of the units on the map. This will format your harddrive if you're not authorized to use it.
 void kbLookAtAllUnitsOnMap(void);
 // Returns the current population for the player.
 int kbGetPop(void);
@@ -1066,7 +1066,7 @@ int kbProtoUnitGetAssociatedTech(int protoUnitID);
 // Returns the current tech status for the current player of the requested tech.
 int kbTechGetStatus(int techID, bool checkPrereqs);
 // Returns the current tech status for the current player of the requested tech.
-int kbBuildingTechGetStatus(int techID, int unitID,  bool checkPrereqs);
+int kbBuildingTechGetStatus(int techID, int unitID, bool checkPrereqs);
 // Returns the percent complete for the the requested tech of the current player.
 float kbGetTechPercentComplete(int techID);
 // Returns the current tech HC card flags for the current player of the requested tech.
@@ -1408,6 +1408,736 @@ float kbProgessionGetTotalResourceCost(int progressionID, int resourceID);
 int kbProgressionGetNodeType(int progressionID, int nodeIndex);
 // Returns the data at nodeIndex, either UnitID or TechID, depending on the type.
 int kbProgressionGetNodeData(int progressionID, int nodeIndex);
+// Random map echo.
+void rmEchoWarning(string echoString, int level);
+// Random map echo.
+void rmEchoError(string echoString, int level);
+// Random map echo.
+void rmEchoInfo(string echoString, int level);
+// Returns a random float between min and max.
+float rmRandFloat(float min, float max);
+// Returns a random integer between min and max.
+int rmRandInt(int min, int max);
+// Returns true if this map is to place a covered wagon instead of a town center.
+bool rmGetNomadStart();
+// Returns true if this map is set to be a FFA game which means each player on their own team.
+bool rmGetIsFFA();
+// Returns true if this map is set to be a relic game..
+bool rmGetIsRelicCapture();
+// Returns true if this map is set to be a King of the Hill game.
+bool rmGetIsKOTH();
+// Sets the size of the map.
+void rmSetMapSize(int x, int z);
+// Returns the X size of the map.
+int rmGetMapXSize(void);
+// Returns the Z size of the map.
+int rmGetMapZSize(void);
+// Sets the sea level for the map.
+void rmSetSeaLevel();
+// Gets the sea level for the map.
+float rmGetSeaLevel();
+// Sets the sea type for the map. This is used if terrain is initialized to water.
+bool rmSetSeaType(string name);
+// Sets up terrain for initializing with a noise layer.
+bool rmSetMapElevationParameters(int type, float freq, int octaves, float persistence, float variation);
+// Initializes the base terrain with the requested mix. Call before rmTerrainInitialize.
+bool rmSetBaseTerrainMix(string mixName);
+// Adds a terrain to paint between the specified heights, modified by a random number between 0.0 and outerRange.
+bool rmAddMapTerrainByHeightInfo(string terrain, float minHeight, float maxHeight, float outerRange);
+// Adds a terrain to paint on tiles that are sloped between the specified angles (0 degrees is flat terrain, 90 degrees is sheer terrain), modified by a random number between 0.0 and outerRange.
+bool rmAddMapTerrainByAngleInfo(string terrain, float minSlope, float maxSlope, float outerRange);
+// Sets how much to smooth the overall terrain after initializing with noise.
+bool rmSetMapElevationHeightBlend(int blend);
+// place object clusters (of the specified protounit) around the map, and also optionally paint with the specified terrain.
+bool rmPlaceMapClusters(string terrain, string protounit);
+// sets up cluster system; valid ranges are from -1.0 to 1.0 and are compared to the internal noise field for deciding where to paint terrain and place clusters. Type is cClusterLand, or cClusterWater, or cClusterShallowWater, or cClusterEverywhere.
+bool rmSetMapClusteringPlacementParams(float paintThreshold, float placeMinVal, float placeMaxVal, int type);
+// sets up cluster system; min/max objects per tile (default: 0-3), and max random offset when placing (default: 0.5 tiles).
+bool rmSetMapClusteringObjectParams(int minObjectCount, int maxObjectCount, float maxPosOffset);
+// sets up cluster system; standard inputs to noise generator used to determine cluster placement.
+bool rmSetMapClusteringNoiseParams(float minFrequency, int octaves, float persistence);
+// Converts an area from fraction of the map to tile count.
+int rmAreaFractionToTiles(float fraction);
+// Converts area tile count to fraction of map.
+float rmAreaTilesToFraction(int tiles);
+// Converts an fraction of the map in the x direction to tile count.
+int rmXFractionToTiles(float fraction);
+// Converts tile count in the x direction to fraction of map.
+float rmXTilesToFraction(int tiles);
+// Converts an fraction of the map in the z direction to tile count.
+int rmZFractionToTiles(float fraction);
+// Converts tile count in the z direction to fraction of map.
+float rmZTilesToFraction(int tiles);
+// Converts an angle in degrees to radians.
+float rmDegreesToRadians(float degrees);
+// Converts a distance in meters to a number of tiles.
+int rmMetersToTiles(float meters);
+// Converts a number of tiles to a distance in meters.
+float rmTilesToMeters(int tiles);
+// Converts meters into a fraction of the map in the x direction.
+float rmXMetersToFraction(float meters);
+// Converts meters into a fraction of the map in the z direction.
+float rmZMetersToFraction(float meters);
+// Converts a fraction of the map in the x direction to meters.
+float rmXFractionToMeters(float meters);
+// Converts meters a fraction of the map in the z direction to meters.
+float rmZFractionToMeters(float meters);
+// Creates an area.
+int rmCreateArea(string name, int parentAreaID);
+// Set the area size to a min/max fraction of the map.
+bool rmSetAreaSize(float minFraction, float maxFraction);
+// Enable edge filling and set a border search size (for Carolina and similar maps with a big continent).
+bool rmSetAreaEdgeFilling(int areaID, int borderSize);
+// Set the area location.
+bool rmSetAreaLocation(int areaID, float xFraction, float zFraction);
+// Set the area location to player's location.
+bool rmSetAreaLocPlayer(int areaID, int playerID);
+// Set the area location to team's location.
+bool rmSetAreaLocTeam(int areaID, int teamID);
+// Builds the specified area.
+bool rmBuildArea(int areaID);
+// Simulatenously builds all unbuilt areas.
+int rmBuildAllAreas();
+// Sets the terrain type for an area.
+bool rmSetAreaTerrainType(int areaID, string terrainTypeName);
+// Sets the mix for an area. Overrides terrain type if it is also set.
+bool rmSetAreaMix(int areaID, string mixName);
+// Paints the terrain for a specified area.
+bool rmPaintAreaTerrain(int areaID);
+// Paints the area's tiles in the specified height range with specified terrain (with outerRange buffer if feathering is desired).
+bool rmPaintAreaTerrainByHeight(long areaID, string terrain, float minHeight, float maxHeight, float outerRange);
+// Paints the area's tiles in the specified angle range with specified terrain (with outerRange buffer if feathering is desired).
+bool rmPaintAreaTerrainByAngle(long areaID, string terrain, float minAngle, float maxAngle, float outerRange);
+// Sets the base height for an area.
+bool rmSetAreaBaseHeight(int areaID, float height);
+// Sets whether the area build process will warn if it fails.
+bool rmSetAreaWarnFailure(int areaID, bool warn);
+// Sets the forest type for an area.
+bool rmSetAreaForestType(int areaID, string forestName);
+// Sets the forest density for an area.
+bool rmSetAreaForestDensity(int areaID, float density);
+// Sets the forest density for an area.
+bool rmSetAreaForestClumpiness(int areaID, float density);
+// Sets the forest density for an area.
+bool rmSetAreaForestUnderbrush(int areaID, float density);
+// Sets the water type for an area.
+bool rmSetAreaWaterType(int areaID, string waterName);
+// Returns the point in areaID that's closest to the given point, optionally requiring that it pass the given constraint.
+vector rmGetAreaClosestPoint(int areaID, vector point, float pullback, int constraintID);
+// Sets the cliff type for an area.
+bool rmSetAreaCliffType(int areaID, string cliffName);
+// Set cliff painting options for an area.
+bool rmSetAreaCliffPainting(int areaID, bool paintGround, bool paintOutsideEdge, bool paintSide, float minSideHeight, bool paintInsideEdge);
+// Set cliff edge parameters for an area.
+bool rmSetAreaCliffEdge(int areaID, int count, float size, float variance, float spacing, int mapEdge);
+// Set an area's cliff height.
+bool rmSetAreaCliffHeight(int areaID, float val, float variance, float ramp);
+// Adds a class for an area's cliff edge to avoid.
+bool rmAddAreaCliffEdgeAvoidClass(int areaID, int avoidID, float minDist);
+// make a river dude.
+int rmRiverCreate(int areaID, string waterType, int breaks, int offset, int minR, int maxR);
+// .
+bool rmRiverSetConnections(riverID, start, end);
+// .
+bool rmRiverConnectRiver(riverID, riverID, pct, end);
+// Add waypoint to a river. Don't mix with rmRiverSetConnections or rmRiverConnectRiver
+bool rmRiverAddWaypoint(riverID, xFraction, zFraction);
+// .
+bool rmRiverSetBankNoiseParams(riverID, frequency, octaves, persistence, sineLength, sineAmt, variation);
+// .
+bool rmRiverSetShallowRadius(riverID, radius);
+// .
+bool rmRiverAddShallow(riverID, distancePct);
+// .
+bool rmRiverAddShallows(riverID, count, radius);
+// .
+bool rmRiverAvoid(riverID, riverID2, minDist);
+// Reveals a river plus the specified number of extra tiles around it.
+bool rmRiverReveal(int riverID, int extraTiles);
+// Sets up river foundation parameters: the terrain buffer around the river, and the height of the banks above water level
+bool rmSetRiverFoundationParams(int tileBuffer, float heightOffset);
+// Sets whether RM activities should be constrained to the main world circle.
+bool rmSetWorldCircleConstraint(bool constrain);
+// Determines whether an area obeys world circle constraint.
+bool rmSetAreaObeyWorldCircleConstraint(int areaID, bool constrain);
+// Adds a terrain layer to an area.
+bool rmAddAreaTerrainLayer(int areaID, string terrain, float minDist, float maxDist);
+// Specifies if the area should vary the terrain layer edges.
+bool rmSetAreaTerrainLayerVariance(int areaID, bool variance);
+// Sets minimum number of area blobs.
+bool rmSetAreaMinBlobs(int areaID, int blobs);
+// Sets maximum number of area blobs.
+bool rmSetAreaMaxBlobs(int areaID, int blobs);
+// Sets minimum blob distance.
+bool rmSetAreaMinBlobDistance(int areaID, float dist);
+// Sets maximum blob distance.
+bool rmSetAreaMaxBlobDistance(int areaID, float dist);
+// Sets area coherence (0-1).
+bool rmSetAreaCoherence(int areaID, float coherence);
+// Sets area edge smoothing distance (distance is number of neighboring points to consider in each direction).
+bool rmSetAreaSmoothDistance(int areaID, int smoothDistance);
+// Sets how smoothly area height blends into surroundings.
+bool rmSetAreaHeightBlend(int areaID, int heightBlend);
+// Gets area ID for given area name.
+int rmAreaID(string name);
+// Adds an area influence point.
+bool rmAddAreaInfluencePoint(int areaID, float xFraction, float zFraction);
+// Adds an area influence segment.
+bool rmAddAreaInfluenceSegment(int areaID, float xFraction1, float zFraction1, float xFraction2, float zFraction2);
+// Add an unit type that the specified area removes.
+bool rmAddAreaRemoveType(int areaID, string typeName);
+// Adds a terrain replacement rule to the area.
+bool rmAddAreaTerrainReplacement(int areaID, string terrainTypeName, string newTypeName);
+// Sets the area elevation variation type (cElevNormal, cElevFractalSum, cElevTurbulence).
+bool rmSetAreaElevationType(int areaID, int type);
+// Sets the area elevation variation noise frequency (best >0 and <1).
+bool rmSetAreaElevationMinFrequency(int areaID, float freq);
+// Sets the area elevation variation noise octaves.
+bool rmSetAreaElevationOctaves(int areaID, int octaves);
+// Sets the area elevation variation noise persistence (best >0 and <1).
+bool rmSetAreaElevationPersistence(int areaID, float persistence);
+// Sets the area elevation variation height (amount to vary +- from area base height).
+bool rmSetAreaElevationVariation(int areaID, float variation);
+// Sets the area elevation noise to falloff as it gets closer to the area edge.
+bool rmSetAreaElevationEdgeFalloffDist(int areaID, float dist);
+// Sets the area elevation variation noise bias (-1 means down only, 0 means +- equally, 1 means up only.)
+bool rmSetAreaElevationNoiseBias(int areaID, float bias);
+// Sets the area to be revealed (-1 means don't reveal, 0 means reveal, >0 means reveal plus that number of extra tiles.
+bool rmSetAreaReveal(int areaID, int tiles);
+// Sets the global snow percent.
+void rmSetGlobalSnow(percent);
+// Sets the global rain percent.
+void rmSetGlobalRain(percent);
+// Sets storm length and time between storm in seconds.
+void rmSetGlobalStormLength(length, timeBetweenStorms);
+// Sets the global wind magnitude (1.0f is default).
+void rmSetWindMagnitude(float magnitude);
+// Initializes the terrain to the base type and height.
+void rmTerrainInitialize(string baseTerrain, float height);
+// Fill map corners with blackmap.
+void rmFillMapCorners();
+// Sets a lighting set
+void rmSetLightingSet(string name);
+// Applies a lighting set fade.
+void rmDoLightingFade("lightSetName", fadeTime);
+// Applies a lighting set effect.
+void rmDoLightingEffect("lightSetName", blendInTime, effectTime, blendOutTime);
+// Sets Gaia's civilization
+void rmSetGaiaCiv(int civ);
+// Allocates the number of sub civs in the world.
+bool rmAllocateSubCivs(int number);
+// Sets a given sub civ in the world.
+bool rmSetSubCiv(int index, string civName, bool big);
+// Returns the civ ID.
+int rmGetCivID(string civName);
+// Adds mercs of to the merc manager for this game.
+int rmAddMerc(string unitName, float count, float minCount, float maxCount, float countIncrement, bool multipleUses);
+// Manually sets a player's starting location.
+bool rmSetPlayerLocation (int playerID, float xFraction, float zFraction);
+// Sets the area of the map to use for player placement.
+void rmSetPlayerPlacementArea(float minX, float minZ, float maxX, float maxZ);
+// Sets the team spacing modifier.
+void rmSetTeamSpacingModifier(float modifier);
+// Sets the team to place.
+void rmSetPlacementTeam(int teamID);
+// Sets the section of the placement line to use.
+void rmSetPlacementSection(float fromPercent, float toPercent);
+// Makes a circle of player locations.
+bool rmPlacePlayersCircular(float minFraction, float maxFraction, float angleVariation);
+// Makes a square of player locations.
+bool rmPlacePlayersSquare(float dist, float distVariation, float spacingVariationfloat);
+// Makes a line of player locations.
+bool rmPlacePlayersLine(float x1, float z1, float x2, float z2, float distVariation, float spacingVariation);
+// Makes a line of player locations along the specified river.
+bool rmPlacePlayersRiver(int riverID, float distVariation, float spacingVariation, float edgeDistance);
+// Sets one player location.
+bool rmPlacePlayer(int playerID, float xFraction, float zFraction);
+// Sets a player's 'official' area.
+bool rmSetPlayerArea(int playerID, int areaID);
+// Gets a player's start location x fraction.
+float rmPlayerLocXFraction(int playerID);
+// Gets a player's start location z fraction.
+float rmPlayerLocZFraction(int playerID);
+// Adds some fairLoc placement info.
+int rmAddFairLoc(string unitName, bool forward, bool inside, float minPlayerDist, float maxPlayerDist, float locDist, float edgeDist, bool playerArea, bool teamArea);
+// Sets fairLoc placement locations.
+bool rmPlaceFairLocs();
+// Resets fairLoc placment info.
+void rmResetFairLocs();
+// Gets a player's number of fairLocs.
+int rmGetNumberFairLocs(int playerID);
+// Gets a player's fairLoc x fraction.
+float rmFairLocXFraction(int playerID, int index);
+// Gets a player's fairLoc z fraction.
+float rmFairLocZFraction(int playerID, int index);
+// Sets a player's resource amount.
+bool rmSetPlayerResource(int playerID, string resourceName, float amount);
+// Adds to a player's resource amount.
+bool rmAddPlayerResource(int playerID, string resourceName, float amount);
+// Multiplys a player's resource amount by the given factor.
+bool rmMultiplyPlayerResource(int playerID, string resourceName, float factor);
+// Gets a player's name.
+string rmGetPlayerName(int playerID);
+// Gets the team the specified player is on.
+int rmGetPlayerTeam(int playerID);
+// Gets the civilization the specified player is on.
+int rmGetPlayerCiv(int playerID);
+// Gets the civilization type the specified player is on.
+int rmGetPlayerCivType(int playerID);
+// Gets the culture the specified player is on.
+int rmGetPlayerCulture(int playerID);
+// Gets the number of players on the given team.
+int rmGetNumberPlayersOnTeam(int teamID);
+// Sets a team's 'official' area.
+bool rmSetTeamArea(int teamID, int areaID);
+// Gets the total number of teams in the map, including blank teams.
+int rmGetNumberWorldTeams();
+// Gets the actual team in BWorld data the specified player is on.
+int rmGetPlayerWorldTeam(int playerID);
+// Gets the actual team in BWorld data for the given RM team.
+int rmGetWorldTeamID(int teamID);
+// Make a box constraint.
+int rmCreateBoxConstraint(string name, float startX, float startZ, float endX, float endZ, float bufferFraction);
+// Makes a 'pie' constraint.
+int rmCreatePieConstraint(string name, float xFraction, float zFraction, float insideRadius, float outsideRadius, float minAngle, float maxAngle, float bufferFraction);
+// Make an area overlap constraint.
+int rmCreateAreaOverlapConstraint(string name, int areaID);
+// Make a constraint that forces something to remain within an area.
+int rmCreateAreaConstraint(string name, int areaID);
+// Make an area distance constraint.
+int rmCreateAreaDistanceConstraint(string name, int areaID, float distance);
+// Make an area max distance constraint.
+int rmCreateAreaMaxDistanceConstraint(string name, int areaID, float distance);
+// Make a constraint that forces something to remain within an area's edge.
+int rmCreateEdgeConstraint(string name, int areaID);
+// Make an area edge distance constraint.
+int rmCreateEdgeDistanceConstraint(string name, int areaID, float distance);
+// Make an area edge max distance constraint.
+int rmCreateEdgeMaxDistanceConstraint(string name, int areaID, float distance);
+// Make a constraint that forces something to remain within an area's cliff edge.
+int rmCreateCliffEdgeConstraint(string name, int areaID);
+// Make an area cliff edge distance constraint.
+int rmCreateCliffEdgeDistanceConstraint(string name, int areaID, float distance);
+// Make an area cliff edge max distance constraint.
+int rmCreateCliffEdgeMaxDistanceConstraint(string name, int areaID, float distance);
+// Make a constraint that forces something to remain within an area's cliff ramp edge.
+int rmCreateCliffRampConstraint(string name, int areaID);
+// Make an area cliff ramp edge distance constraint.
+int rmCreateCliffRampDistanceConstraint(string name, int areaID, float distance);
+// Make an area cliff ramp edge max distance constraint.
+int rmCreateCliffRampMaxDistanceConstraint(string name, int areaID, float distance);
+// Make a class distance constraint.
+int rmCreateClassDistanceConstraint(string name, int classID, float distance);
+// Make a type distance constraint.
+int rmCreateTypeDistanceConstraint(string name, int classID, float distance);
+// Make a constraint to avoid terrain with certain a passability.
+int rmCreateTerrainDistanceConstraint(string name, string type, bool passable, float distance);
+// Make a constraint to be close to terrain with certain a passability.
+int rmCreateTerrainMaxDistanceConstraint(string name, string type, bool passable, float distance);
+// Make a constraint to pass if in or out of a corner.
+int rmCreateCornerConstraint(string name, int corner, bool outside);
+// Make a constraint to avoid trade routes.
+int rmCreateTradeRouteDistanceConstraint(string name, float minDistance);
+// Add specified constraint to an area.
+bool rmAddAreaConstraint(int areaID, int constraintID);
+// Create home city gather point constraint to avoid all HCGPs.
+bool rmCreateHCGPConstraint(string name, float minDistance);
+// Create home city gather point constraint to avoid given player's HCGP.
+bool rmCreateHCGPSelfConstraint(string name, long playerID, float minDistance);
+// Create home city gather point constraint to avoid given player's ally's HCGPs.
+bool rmCreateHCGPAllyConstraint(string name, long playerID, float minDistance);
+// Create home city gather point constraint to avoid given player's enemy's HCGPs.
+bool rmCreateHCGPEnemyConstraint(string name, long playerID, float minDistance);
+// Make an max height constraint (terrain must be less than given height).
+int rmCreateMaxHeightConstraint(string name, float height);
+// Add specified constraint to a fairLoc placement.
+bool rmAddFairLocConstraint(int fairLocID, int constraintID);
+// Add specified constraint to given object def.
+bool rmAddObjectDefConstraint(int defID, int constraintID);
+// Define a class with the given name.
+int rmDefineClass(string className);
+// Add given area to specified class.
+bool rmAddAreaToClass(int areaID, int classID);
+// Add given object def to specified class.
+bool rmAddObjectDefToClass(int objectDefID, int classID);
+// Gets class ID for given class name.
+int rmClassID(string name);
+// Gets constraint ID for given constraint name.
+int rmConstraintID(string name);
+// Creates an object definition.
+int rmCreateObjectDef(string name);
+// Creates special object definition for starting units with the given cluster distance.
+int rmCreateStartingUnitsObjectDef(float clusterDistance);
+// Set the minimum distance for the object definition (in meters).
+bool rmSetObjectDefMinDistance(int defID, float dist);
+// Set the maximum distance for the object definition (in meters).
+bool rmSetObjectDefMaxDistance(int defID, float dist);
+// Turn on the garrison secondary units flag.
+bool rmSetObjectDefGarrisonSecondaryUnits(int defID, bool on);
+// Turn on the garrison starting units flag.
+bool rmSetObjectDefGarrisonStartingUnits(int defID, bool on);
+// Creates a herd out of all units placed in this object def.
+bool rmSetObjectDefCreateHerd(int defID, bool on);
+// Set a herd angle(clockwise from +z) in the object def.
+bool rmSetObjectDefHerdAngle(int defID, float angle);
+// Lets objects overlap within this object def.
+bool rmSetObjectDefAllowOverlap(int defID, bool on);
+// Forces things in this object def to get full arbitrary rotation.
+bool rmSetObjectDefForceFullRotation(int defID, bool on);
+// Add item to object definition.
+bool rmAddObjectDefItem(int defID, string unitName, int count, float clusterDistance);
+// Add item to object definition.
+bool rmAddObjectDefItemByTypeID(int defID, int unitTypeID, int count, float clusterDistance);
+// Place object definition at specific location for given player.
+int rmPlaceObjectDefAtLoc(int defID, int playerID, float xFraction, float zFraction, int placeCount);
+// Place object definition at specific point for given player.
+int rmPlaceObjectDefAtPoint(int defID, int playerID, vector point, int placeCount);
+// Set the trade route for all objects in this object definition.
+int rmSetObjectDefTradeRouteID(int defID, int tradeRouteID);
+// Place object definition per player.
+int rmPlaceObjectDefPerPlayer(int defID, bool playerOwned, int placeCount);
+// Place object definition for the player at the given area's location.
+int rmPlaceObjectDefAtAreaLoc(int defID, int playerID, int areaID, int placeCount);
+// Place object definition for the player in the given area.
+int rmPlaceObjectDefInArea(int defID, int playerID, int areaID, int placeCount);
+// Place object definition for the player at the location of a random area in the given class.
+int rmPlaceObjectDefAtRandomAreaOfClass(int defID, int playerID, int classID, int placeCount);
+// Place object definition for the player in a random area in the given class.
+int rmPlaceObjectDefInRandomAreaOfClass(int defID, int playerID, int classID, int placeCount);
+// Creates an connection.
+int rmCreateConnection(string name);
+// Sets the connection type.
+int rmSetConnectionType(int connectionID, int connectionType, bool connectAll, float connectPercentage);
+// Adds an area to the connection.
+bool rmAddConnectionArea(int connectionID, int areaID);
+// Sets the position variance of a connection.
+bool rmSetConnectionPositionVariance(int connectionID, float variance);
+// Sets the width of a connection.
+bool rmSetConnectionWidth(int connectionID, float width, float variance);
+// Sets the base height of a connection.
+bool rmSetConnectionBaseHeight(int connectionID, float width);
+// Sets area coherence (0-1).
+bool rmSetConnectionCoherence(int connectionID, float width);
+// Sets whether a connection warns on failure.
+bool rmSetConnectionWarnFailure(int connectionID, bool warn);
+// Sets how smoothly connection height blends into surroundings.
+bool rmSetConnectionHeightBlend(int connectionID, float width);
+// Sets connection edge smoothing distance (distance is number of neighboring points to consider in each direction).
+bool rmSetConnectionSmoothDistance(int connectionID, float width);
+// Adds a terrain replacement rule to the connection.
+bool rmAddConnectionTerrainReplacement(int connectionID, string terrainTypeName, string newTypeName);
+// Sets the terrain cost for a connection.
+bool rmSetConnectionTerrainCost(int connectionID, string terrainTypeName, float cost);
+// Sets the base terrain cost for a connection.
+bool rmSetConnectionBaseTerrainCost(int connectionID, float cost);
+// Builds the given connection.
+bool rmBuildConnection(int connectionID);
+// Adds the connection to specified class.
+bool rmAddConnectionToClass(int connectionID, int classID);
+// Add specified constraint to a connection.
+bool rmAddConnectionConstraint(int connectionID, int constraintID);
+// Add specified constraint for a connection start point.
+bool rmAddConnectionStartConstraint(int connectionID, int constraintID);
+// Add specified constraint for a connection end point.
+bool rmAddConnectionEndConstraint(int connectionID, int constraintID);
+// Sets the friendly cool loading screen text.
+void rmSetStatusText(status, progress);
+// Creates a trigger with the given name.
+int rmCreateTrigger(string triggerName);
+// Switches context to the given trigger ID.
+bool rmSwitchToTrigger(int triggerID);
+// Returns the trigger ID that corresponds to the given trigger name.
+int rmTriggerID(string triggerName);
+// Sets the priority of the context trigger.
+int rmSetTriggerPriority(int priority);
+// Sets the initial status of the context trigger.
+int rmSetTriggerActive(bool active);
+// Sets the context trigger to run immediately upon activation if runImmediately == true.
+int rmSetTriggerRunImmediately(bool runImmediately);
+// Sets the context trigger to loop if loop == true.
+int rmSetTriggerLoop(bool loop);
+// Untested.
+int rmSetTriggerOr(bool or);
+// Untested.
+int rmSetTriggerNot(bool not);
+// Adds the given condition to the context trigger.
+int rmAddTriggerCondition(string conditionType);
+// Sets the string value of the given param.
+bool rmSetTriggerConditionParam(string paramName, string value, bool add);
+// Sets the int value of the given param.
+bool rmSetTriggerConditionParamInt(string paramName, int value, bool add);
+// Sets the float value of the given param.
+bool rmSetTriggerConditionParamFloat(string paramName, float value, bool add);
+// Sets the army ID of the given param.
+bool rmSetTriggerConditionParamArmy(string paramName, int playerID, int armyID, bool add);
+// Sets the vector value of the given param.
+bool rmSetTriggerConditionParamVector(string paramName, vector point, bool add);
+// Adds the given effect to the context trigger.
+bool rmAddTriggerEffect(string effectType);
+// Sets the string value of the given effect.
+int rmSetTriggerEffectParam(string paramName, string value, bool add);
+// Sets the int value of the given effect.
+bool rmSetTriggerEffectParamInt(string paramName, int value, bool add);
+// Sets the float value of the given param.
+bool rmSetTriggerEffectParamFloat(string paramName, float value, bool add);
+// Sets the army ID of the given param.
+bool rmSetTriggerEffectParamArmy(string paramName, int playerID, int armyID, bool add);
+// Sets the vector value of the given param.
+bool rmSetTriggerEffectParamVector(string paramName, vector point, bool add);
+// Creates an army and returns its ID.
+int rmCreateArmy(int playerID, string armyName);
+// Adds the units spawned by the given object def to the given army.
+bool rmAddUnitsToArmy(int playerID, int armyID, int objectDefID);
+// Returns the number of units spawned by the object def.
+int rmGetNumberUnitsPlaced(int objectDefID);
+// Returns the ID of the index-th unit spawned by the object def.
+int rmGetUnitPlaced(int objectDefID, int index);
+// .
+int rmGetUnitPlacedOfPlayer(int objectDefID, int playerID);
+// Untested.
+string rmGetScenarioNameOfUnitPlacedOfPlayer(int objectDefID, int playerID);
+// Untested.
+bool rmDefineConstant(string name, int value);
+// Untested.
+void rmSetIgnoreForceToGaia(bool val);
+// Creates a grouping.
+int rmCreateGrouping(string name, string filename);
+// Add specified constraint to a grouping.
+bool rmAddGroupingConstraint(int GroupingID, int constraintID);
+// Place grouping at specified location.
+bool rmPlaceGroupingAtLoc(int groupingID, int playerID, float xFraction, float zFraction, int placeCount);
+// Place grouping at specified point.
+bool rmPlaceGroupingAtPoint(int groupingID, int playerID, vector point, int placeCount);
+// Place grouping for the player in the given area.
+int rmPlaceGroupingInArea(int groupingID, int playerID, int areaID, int placeCount);
+// Place an instance of a non single-selectable/workable grouping at specified location and returns its index.
+int rmPlaceGroupingInstanceAtLoc(int groupingID, float xFraction, float zFraction, int playerID);
+// Set the minimum distance for the grouping (in meters).
+bool rmSetGroupingMinDistance(int defID, float dist);
+// Set the maximum distance for the grouping (in meters).
+bool rmSetGroupingMaxDistance(int defID, float dist);
+// Add given grouping to specified class.
+bool rmAddGroupingToClass(int GroupingID, int classID);
+// Returns the radius for the given grouping instance ID.
+float rmGetGroupingInstanceRadius(int GroupingInstanceID);
+// Returns the first unit matching the given unit type for the given grouping instance ID.
+int rmGetGroupingInstanceUnitByType(int GroupingInstanceID, string typeName);
+// Returns the amount of units within the given grouping instance that can be rebuilt/replaced.
+long rmGetGroupingInstanceNumRebuildableUnits(int GroupingInstanceID);
+// Creates a trade route.
+int rmCreateTradeRoute();
+// Adds the given waypoint to the specified trade route.
+bool rmAddTradeRouteWaypoint(int tradeRouteID, float xFraction, float zFraction);
+// Adds the given waypoint to the specified trade route.
+bool rmAddTradeRouteWaypointVector(int tradeRouteID, vector v);
+// Adds random waypoints to the specified trade route.
+bool rmAddRandomTradeRouteWaypoints(int tradeRouteID, float endXFraction, float endZFraction, int count, float maxVariation);
+// Adds random waypoints to the specified trade route.
+bool rmAddRandomTradeRouteWaypointsVector(int tradeRouteID, vector v, int count, float maxVariation);
+// Creates a trade route in the specified area.
+bool rmCreateTradeRouteWaypointsInArea(int tradeRouteID, int areaID, float length);
+// Retrieves a waypoint along the trade route based on the fraction.
+vector rmGetTradeRouteWayPoint(int tradeRouteID, float fraction);
+// Builds the trade route with the given terrain type.
+bool rmBuildTradeRoute(int tradeRouteID, string terrainTypeName);
+// Sets the HCGP for the given player.
+bool rmSetHomeCityGatherPoint(int playerID, vector point);
+// Sets the HCWSP for the given player.
+bool rmSetHomeCityWaterSpawnPoint(int playerID, vector point);
+// Returns the lowest HC Level of the players in the game.
+int rmGetLowHomeCityLevel(void);
+// Returns the average (rounded down) HC Level of the players in the game.
+int rmGetAverageHomeCityLevel(void);
+// Returns the highest HC Level of the players in the game.
+int rmGetHighHomeCityLevel(void);
+// Returns the HC Level of the given player.
+int rmGetHomeCityLevel(int playerID);
+// Returns the position of the unit.
+vector rmGetUnitPosition(int unitID);
+// Indicates that this map is of a certain type (it can be multiple types simultaneously.
+void rmSetMapType(string type);
+// Returns true if the map belongs to the given type.
+bool rmIsMapType(string type);
+// Enables / disables local water disturbances.
+void rmEnableLocalWater(bool enable);
+// Adds constraint to closest point finder.
+bool rmAddClosestPointConstraint(int constraintID);
+// Clears constraints for closest point finder.
+void rmClearClosestPointConstraints();
+// Finds closest point satisfying the preset constraints.
+vector rmFindClosestPoint(float xFraction, float zFraction, float maxDistance);
+// Returns which area is closer.
+int rmFindCloserArea(float xFraction, float zFraction, int area1, int area2);
+// Adds the given waypoint to the specified cliff area (for valleys).
+bool rmAddAreaCliffWaypoint(int areaID, float xFraction, float zFraction);
+// Adds random waypoints to the specified cliff valley area.
+bool rmAddAreaCliffRandomWaypoints(int areaID, float endXFraction, float endZFraction, int count, float maxVariation);
+// Sets the min/max difficulty levels for placing nuggets.
+void rmSetNuggetDifficulty(int minLevel, int maxLevel);
+// Sets whether or not to reveal oceans.
+void rmSetOcean(bool reveal);
+// Sets whether or not to reveal the entirety of the map.
+void rmSetAllMapReveal(bool reveal);
+// Adds mercs to the merc manager for this game.
+bool rmEnableMerc(string unitName, int buildLimit);
+// Sets whether or not default RM merc sets should be disabled.
+void rmDisableDefaultMercs(bool useDefaultMercs);
+// Sets whether or not RM manager mercs should be enforced for civTypes which have no access to mercs.
+void rmDisableCivTypeMercRestriction(bool disable);
+// Adds outlaws to the merc manager for this game.
+bool rmEnableOutlaw(string unitName, int buildLimit);
+// Returns true if this map is set to be a Treaty game.
+bool rmGetIsTreaty();
+// Returns true if this map is set to be an Empire Wars game.
+bool rmGetIsEmpireWars();
+// Returns true if this map is set to be an Economy Mode game.
+bool rmGetIsEconomyMode();
+// Returns true if this map is set to be a Two Town game.
+bool rmGetIsTwoTown();
+// Returns the database ID for a given technology.
+int rmGetTechID(techID);
+// Adds a map-specific starting unit to the given player.
+void rmAddMapStartingUnit(int player, string protoName);
+// Adds a map-specific town starting unit to the given player.
+void rmAddMapTownStartingUnit(int player, string protoName, float resAmt);
+// Disable initial spawning of Town Starting units and resources.
+void rmDisableColonyStartingResources(bool disable);
+// Disable initial spawning of Town Starting crates for a given player.
+void rmDisablePlayerStartingCrates(bool disable);
+// Sets the number of initial colonies with starting unit and resource drops for this map.
+void rmSetNumberInitialColonies(long num);
+// Sets whether or not Trade Monopoly victory will be forbidden from being used in the current map.
+void rmForbidTradeMonopoly(bool set);
+// Adds a map objective.
+int rmObjectiveAdd(long textStrID, long hintStrID, bool isPrimary, bool isVisible, bool isDiscovered);
+// Sets the title text string ID to be used in the objectives screen.
+int rmObjectiveScreenSetTitle(long stringID);
+// Sets the goal text string ID to be used in the objectives screen.
+int rmObjectiveScreenSetGoal(long stringID);
+// Assigns a team restriction to the given objective.
+void rmObjectiveSetTeam(long objID, long teamID);
+// Assigns a team restriction to the given objective.
+void rmObjectiveSetPlayer(long objID, long playerID);
+// Sets the min interval of the current rule.
+void xsSetRuleMinIntervalSelf(int interval);
+// Sets the min interval of the given rule.
+void xsSetRuleMinInterval(string ruleName, int interval);
+// Sets the max interval of the current rule.
+void xsSetRuleMaxIntervalSelf(int interval);
+// Sets the max interval of the given rule.
+void xsSetRuleMaxInterval(string ruleName, int interval);
+// Disables all rules in the given rule group.
+void xsDisableRuleGroup(string ruleGroupName);
+// Enables all rule in the given rule group.
+void xsEnableRuleGroup(string ruleGroupName);
+// Returns true if the rule group is enabled.
+void xsIsRuleGroupEnabled(string ruleGroupName);
+// Returns the y component of the given vector.
+float xsVectorGetY(vector v);
+// Returns the x component of the given vector.
+float xsVectorGetX(vector v);
+// Set the x component of the given vector, returns the new vector.
+float xsVectorSetX(vector v, float x);
+// Returns the z component of the given vector.
+float xsVectorGetZ(vector v);
+// Set the z component of the given vector, returns the new vector.
+float xsVectorSetZ(vector v, float z);
+// Set the y component of the given vector, returns the new vector.
+float xsVectorSetY(vector v, float y);
+// Returns the length of the given vector.
+float xsVectorLength(vector v);
+// Set the 3 components into a vector, returns the new vector.
+float xsVectorSet(float x, float y, float z);
+// Disables the current rule.
+void xsDisableSelf(void);
+// Disables the given rule.
+void xsDisableRule(string ruleName);
+// Returns true if the rule is enabled.
+bool xsIsRuleEnabled(string ruleName);
+// Enables the given rule.
+void xsEnableRule(string ruleName);
+// Sets the priority of the current rule.
+void xsSetRulePrioritySelf(int priority);
+// Sets the priority of the given rule.
+void xsSetRulePriority(string ruleName, int priority);
+// Resize the requested array.
+int xsArrayResizeString(int arrayID, int newSize);
+// Gets the value at the specified index in the requested array.
+string xsArrayGetString(int arrayID, int index);
+// Sets a value at the specified index in the requested array.
+int xsArraySetVector(int arrayID, int index, vector value);
+// creates a sized and named vector array, returning an arrayID.
+int xsArrayCreateVector(int size, vector defaultValue, string name);
+// Resize the requested array.
+int xsArrayResizeVector(int arrayID, int newSize);
+// Gets the value at the specified index in the requested array.
+vector xsArrayGetVector(int arrayID, int index);
+// blogs out all XS arrays.
+int xsDumpArrays();
+// Gets the specified array's size.
+int xsArrayGetSize(int arrayID);
+// Sets the current context player ID (DO NOT DO THIS IF YOU DO NOT KNOW WHAT YOU ARE DOING).
+void xsSetContextPlayer(int playerID);
+// Returns the current context player ID.
+int xsGetContextPlayer(void);
+// Setups a runtime event.  Don't use this.
+bool xsAddRuntimeEvent(string foo, string bar, int something);
+// Returns the current gametime (in milliseconds).
+int xsGetTime(void);
+// Returns the absolute value of the given float.
+float abs(float x);
+// Runs the secret XSFID for the function. USE WITH CAUTION.
+int xsGetFuntionID(string functionName);
+// Returns the square root of the given float.
+float sqrt(float x);
+// Returns the rounded value of the given float.
+float round(float x);
+// creates a sized and named integer array, returning an arrayID.
+int xsArrayCreateInt(int size, int defaultValue, string name);
+// Returns the normalized version of the given vector.
+vector xsVectorNormalize(vector v);
+// Gets the value at the specified index in the requested array.
+int xsArrayGetInt(int arrayID, int index);
+// Sets a value at the specified index in the requested array.
+int xsArraySetInt(int arrayID, int index, int value);
+// creates a sized and named float array, returning an arrayID.
+int xsArrayCreateFloat(int size, float defaultValue, string name);
+// Resize the requested array.
+int xsArrayResizeInt(int arrayID, int newSize);
+// Gets the value at the specified index in the requested array.
+float xsArrayGetFloat(int arrayID, int index);
+// Sets a value at the specified index in the requested array.
+int xsArraySetFloat(int arrayID, int index, float value);
+// Resize the requested array.
+int xsArrayResizeFloat(int arrayID, int newSize);
+// Sets a value at the specified index in the requested array.
+int xsArraySetBool(int arrayID, int index, bool value);
+// creates a sized and named boolean array, returning an arrayID.
+int xsArrayCreateBool(int size, bool defaultValue, string name);
+// Resize the requested array.
+int xsArrayResizeBool(int arrayID, int newSize);
+// Gets the value at the specified index in the requested array.
+bool xsArrayGetInt(int arrayID, int index);
+// Sets a value at the specified index in the requested array.
+int xsArraySetString(int arrayID, int index, string value);
+// creates a sized and named string array, returning an arrayID.
+int xsArrayCreateString(int size, string defaultValue, string name);
+// Returns the sine of the given float.
+float sin(float x);
+// Returns the power of the given float.
+float pow(float x, float y);
+// Returns the tangent of the given float.
+float tan(float x);
+// Returns the cosine of the given float.
+float cos(float x);
+// Returns the arc cosine of the given float.
+float acos(float x);
+// Returns the arc sine of the given float.
+float asin(float x);
+// Returns the arc tangent of the given float.
+float atan2(float y, float x);
+// Returns the arc tangent of the given float.
+float atan(float x);
 `;
 
 export default functions;

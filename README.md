@@ -4,6 +4,10 @@ Enables syntax highlighting and provides snippets for the scripting language use
 
 ## Release Notes
 
+### 1.0.1
+
+- Added completion for Random Map and XS functions.
+
 ### 1.0.0
 
 Initial release.
