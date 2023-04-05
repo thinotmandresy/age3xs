@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0
+
+- Blocks can now be folded.
+
 ## 1.1.0
 
 - Added rule snippets
