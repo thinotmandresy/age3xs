@@ -11,6 +11,8 @@ import {
   CompletionItem,
   CompletionItemKind,
   InsertTextFormat,
+  SemanticTokens,
+  SemanticTokensBuilder,
   TextDocumentPositionParams,
   TextDocumentSyncKind,
   InitializeResult,
@@ -69,6 +71,14 @@ function parseFunctionString(functionString: string): CompletionItem[] {
   const functionRegex = /\/\/\s(.+)\n(\w+)\s+(\w+)\((.*)\);/g;
   let match = functionRegex.exec(functionString);
   const completionItems: CompletionItem[] = [];
+  const keywords = ["if", "else", "switch", "while", "for", "label", "case", "default", "goto", "continue", "break", "breakpoint", "return"];
+
+  keywords.forEach((item) => {
+    completionItems.push({
+      label: item,
+      kind: CompletionItemKind.Keyword,
+    });
+  });
 
   constants.forEach((item) => {
     completionItems.push(item);

@@ -25,11 +25,18 @@ Enables syntax highlighting and provides snippets for the scripting language use
   - `newplanr`: creates a simple research plan.
   - `newplanm`: creates a simple maintain plan.
   - `newquery`: creates a simple unit query.
+  - `lb`: inserts a new label.
+  - `go`: inserts a goto instruction.
 
 - Function and constant completion and documentation
 ![Function documentation](https://raw.githubusercontent.com/thinotmandresy/age3xs/main/assets/function-completion.png)
 
 ## Release Notes
+
+### 1.3.0
+
+- Added completion for keywords.
+- Added `label` and `goto` snippets (respectively `lb` and `go`)
 
 ### 1.2.0
 

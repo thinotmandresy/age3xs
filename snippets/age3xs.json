@@ -1,4 +1,20 @@
 {
+  "Break": {
+    "prefix": "break",
+    "body": ["break;"]
+  },
+  "Continue": {
+    "prefix": "continue",
+    "body": ["continue;"]
+  },
+  "Label": {
+    "prefix": "lb",
+    "body": ["label ${1:lbPrioritizedSection};"]
+  },
+  "Go to": {
+    "prefix": "go",
+    "body": ["goto ${1:lbPrioritizedSection};"]
+  },
   "Create new rule": {
     "prefix": "newrule",
     "body": [
